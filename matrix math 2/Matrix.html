@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="https://gist.github.com/yourgistid.js"></script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1>Matrix differentiation using limits</h1>
+
+  let us take <br><br>
+
+  <b>Input Matrix, </b>
+
+  \(A = \begin{bmatrix} a_{11} & a_{12} & \dots & a_{1j} \\ a_{21} & a_{22} & \dots & a_{2j} \\ \vdots & \vdots & \ddots
+  & \vdots \\ a_{i1} & a_{i2} & \dots & a_{ij} \end{bmatrix}\) <br><br>
+
+  <b>Weight Matrix, </b>
+
+  \(W = \begin{bmatrix} w_{11} \\ w_{21} \\ \vdots \\ w_{j1} \end{bmatrix}\) <br><br>
+
+  <b>Output Matrix</b>
+
+  \(Y = \begin{bmatrix} y_{11} \\ y_{21} \\ \vdots \\ y_{i1} \end{bmatrix}\) <br><br>
+
+  <b>Y Predict Matrix, </b>
+
+  \(\hat{Y} = \begin{bmatrix} \hat{y}_{11} \\ \hat{y}_{21} \\ \vdots \\ \hat{y}_{i1} \end{bmatrix}\) <br><br>
+<hr>
+  <h2>Loss [MSE]</h2>
+
+  \(loss = \frac{1}{N}\sum(Y-\hat{Y})^2 \dots \dots \) here \(N\) is the number of rows in input matrix \(A\) <br><br>
+
+  \(loss = \frac{1}{N}\sum(Y-A.W)^2\) <br><br>
+
+  \(loss = \frac{1}{N}\sum \left\{ \begin{bmatrix} y_{11} \\ y_{21} \\ \vdots \\ y_{i1} \end{bmatrix} - \begin{bmatrix}
+  a_{11} & a_{12} & \dots & a_{1j} \\ a_{21} & a_{22} & \dots & a_{2j} \\ \vdots & \vdots & \ddots & \vdots \\ a_{i1} &
+  a_{i2} & \dots & a_{ij} \end{bmatrix} \cdot \begin{bmatrix} w_{11} \\ w_{21} \\ \vdots \\ w_{j1} \end{bmatrix}
+  \right\}^2\) <br><br>
+
+  \(loss = \frac{1}{N}\sum \left\{ \begin{bmatrix} y_{11} \\ y_{21} \\ \vdots \\ y_{i1} \end{bmatrix} - \begin{bmatrix}
+  a_{11}w_{11} + a_{12}w_{21} + \dots + a_{1j}w_{j1} \\ a_{21}w_{11} + a_{22}w_{21} + \dots + a_{2j}w_{j1} \\ \vdots \\
+  a_{i1}w_{11} + a_{i2}w_{21} + \dots + a_{ij}w_{j1} \end{bmatrix} \right\}^2\) <br><br>
+
+  \(loss = \frac{1}{N}\sum \left\{\begin{bmatrix} y_{11} - a_{11}w_{11} + a_{12}w_{21} + \dots + a_{1j}w_{j1} \\ y_{21}
+  - a_{21}w_{11} + a_{22}w_{21} + \dots + a_{2j}w_{j1} \\ \vdots \\ y_{i1} - a_{i1}w_{11} + a_{i2}w_{21} + \dots +
+  a_{ij}w_{j1} \end{bmatrix} \right\}^2\) <br><br>
+
+  \(loss = \frac{1}{N}\sum \left\{\begin{bmatrix} (y_{11} - a_{11}w_{11} + a_{12}w_{21} + \dots + a_{1j}w_{j1})^2 \\
+  (y_{21} - a_{21}w_{11} + a_{22}w_{21} + \dots + a_{2j}w_{j1})^2 \\ \vdots \\ (y_{i1} - a_{i1}w_{11} + a_{i2}w_{21} +
+  \dots + a_{ij}w_{j1})^2 \end{bmatrix} \right\}\) <br><br>
+
+  \(loss = \frac{1}{N} \left\{\begin{matrix} (y_{11} - a_{11}w_{11} + a_{12}w_{21} + \dots + a_{1j}w_{j1})^2 \\ +(y_{21}
+  - a_{21}w_{11} + a_{22}w_{21} + \dots + a_{2j}w_{j1})^2 \\ \vdots \\ +(y_{i1} - a_{i1}w_{11} + a_{i2}w_{21} + \dots +
+  a_{ij}w_{j1})^2 \end{matrix} \right\}\)
+<hr>
+<h2>Grad</h2>
+\(loss(W) = \frac{1}{N} \left\{\begin{matrix} (y_{11} - a_{11}w_{11} + a_{12}w_{21} + \dots + a_{1j}w_{j1})^2 \\ +(y_{21}
+- a_{21}w_{11} + a_{22}w_{21} + \dots + a_{2j}w_{j1})^2 \\ \vdots \\ +(y_{i1} - a_{i1}w_{11} + a_{i2}w_{21} + \dots +
+a_{ij}w_{j1})^2 \end{matrix} \right\}\) <br><br>
+\(\displaystyle \delta w_{j1} = \lim_{h_{j1} \rightarrow 0} \frac{loss(w_{j1}+h) - loss(w_{j1}-h)}{2h}\) <br><br>
+
+\(\delta W = \begin{bmatrix} \displaystyle \lim_{h \rightarrow 0} \frac{loss(w_{11}+h) - loss(w_{11}-h)}{2h} \\ \displaystyle \lim_{h \rightarrow 0} \frac{loss(w_{21}+h) - loss(w_{21}-h)}{2h} \\ \vdots \\ \displaystyle \lim_{h \rightarrow 0} \frac{loss(w_{j1}+h) - loss(w_{j1}-h)}{2h} \end{bmatrix} \) <br><br>
+<hr>
+
+<div style="height: 250px;"></div>
+
+<h2>Simple Python Example</h2>
+
+<pre>
+  <code id="htmlViewer" style="color:rgb(171, 178, 191); font-weight:400;background-color:rgb(40, 44, 52);background:rgb(40, 44, 52);display:block;padding: .5em;"><span style="color:rgb(198, 120, 221); font-weight:400;"> import</span> numpy <span style="color:rgb(198, 120, 221); font-weight:400;">as</span> np
+ <span style="color:rgb(198, 120, 221); font-weight:400;">import</span> matplotlib.pyplot <span style="color:rgb(198, 120, 221); font-weight:400;">as</span> plt
+ np.random.seed(<span style="color:rgb(209, 154, 102); font-weight:400;">0</span>)
+ 
+ <span style="color:rgb(92, 99, 112); font-weight:400;"># Matrices</span>
+ A = np.array([
+     [<span style="color:rgb(209, 154, 102); font-weight:400;">1</span>, <span style="color:rgb(209, 154, 102); font-weight:400;">2</span>, <span style="color:rgb(209, 154, 102); font-weight:400;">3</span>],
+     [<span style="color:rgb(209, 154, 102); font-weight:400;">4</span>, <span style="color:rgb(209, 154, 102); font-weight:400;">5</span>, <span style="color:rgb(209, 154, 102); font-weight:400;">6</span>],
+     [<span style="color:rgb(209, 154, 102); font-weight:400;">7</span>, <span style="color:rgb(209, 154, 102); font-weight:400;">8</span>, <span style="color:rgb(209, 154, 102); font-weight:400;">9</span>]
+ ], dtype=<span style="color:rgb(152, 195, 121); font-weight:400;">&#x27;float32&#x27;</span>)
+ 
+ W = np.random.randn(<span style="color:rgb(209, 154, 102); font-weight:400;">3</span>, <span style="color:rgb(209, 154, 102); font-weight:400;">1</span>)
+ previous_W = W.copy()
+ 
+ Y = np.array([[<span style="color:rgb(209, 154, 102); font-weight:400;">14</span>], [<span style="color:rgb(209, 154, 102); font-weight:400;">32</span>], [<span style="color:rgb(209, 154, 102); font-weight:400;">50</span>]])
+ 
+ <span style="color:rgb(92, 99, 112); font-weight:400;"># Loss function [MSE]</span>
+ <span style="color:rgb(198, 120, 221); font-weight:400;">def</span> <span class="hljs-title function_">loss</span>(<span style="color:rgb(171, 178, 191); font-weight:400;">Y, A, W</span>):
+     <span style="color:rgb(198, 120, 221); font-weight:400;">return</span> ((Y - A @ W)**<span style="color:rgb(209, 154, 102); font-weight:400;">2</span>).mean()
+ 
+ <span style="color:rgb(92, 99, 112); font-weight:400;"># Grad</span>
+ <span style="color:rgb(198, 120, 221); font-weight:400;">def</span> <span class="hljs-title function_">dW</span>(<span style="color:rgb(171, 178, 191); font-weight:400;">Y, A, W, h</span>):
+     dw = []
+     <span style="color:rgb(198, 120, 221); font-weight:400;">for</span> i <span style="color:rgb(198, 120, 221); font-weight:400;">in</span> <span style="color:rgb(230, 192, 123); font-weight:400;">range</span>(<span style="color:rgb(230, 192, 123); font-weight:400;">len</span>(W)):
+         w_plus = W.copy()
+         w_minus = W.copy()
+ 
+         w_plus[i][<span style="color:rgb(209, 154, 102); font-weight:400;">0</span>] += h
+         w_minus[i][<span style="color:rgb(209, 154, 102); font-weight:400;">0</span>] -= h
+         dw.append((loss(Y, A, w_plus) - loss(Y, A, w_minus)) / <span style="color:rgb(209, 154, 102); font-weight:400;">2</span>*h)
+     <span style="color:rgb(198, 120, 221); font-weight:400;">return</span> np.array(dw).reshape(-<span style="color:rgb(209, 154, 102); font-weight:400;">1</span>, <span style="color:rgb(209, 154, 102); font-weight:400;">1</span>)
+ 
+ 
+ <span style="color:rgb(230, 192, 123); font-weight:400;">print</span>(<span style="color:rgb(152, 195, 121); font-weight:400;">&#x27;Loss:&#x27;</span>, loss(Y, A, W))
+ losses = [loss(Y, A, W)]
+ 
+ <span style="color:rgb(92, 99, 112); font-weight:400;"># iteration</span>
+ <span style="color:rgb(198, 120, 221); font-weight:400;">for</span> i <span style="color:rgb(198, 120, 221); font-weight:400;">in</span> <span style="color:rgb(230, 192, 123); font-weight:400;">range</span>(<span style="color:rgb(209, 154, 102); font-weight:400;">1000</span>):
+ 
+     W = W - dW(Y, A, W, <span style="color:rgb(209, 154, 102); font-weight:400;">0.1</span>) <span style="color:rgb(92, 99, 112); font-weight:400;"># grad</span>
+ 
+     <span style="color:rgb(198, 120, 221); font-weight:400;">if</span> i &gt; <span style="color:rgb(209, 154, 102); font-weight:400;">995</span> <span style="color:rgb(198, 120, 221); font-weight:400;">or</span> i &lt; <span style="color:rgb(209, 154, 102); font-weight:400;">5</span>:
+         <span style="color:rgb(230, 192, 123); font-weight:400;">print</span>(<span style="color:rgb(152, 195, 121); font-weight:400;">f&#x27;Loss (<span style="color:rgb(224, 108, 117); font-weight:400;">{i+<span style="color:rgb(209, 154, 102); font-weight:400;">1</span>}</span>):&#x27;</span>, loss(Y, A, W))
+     <span style="color:rgb(198, 120, 221); font-weight:400;">elif</span> i <span style="color:rgb(198, 120, 221); font-weight:400;">in</span> [<span style="color:rgb(209, 154, 102); font-weight:400;">6</span>,<span style="color:rgb(209, 154, 102); font-weight:400;">7</span>,<span style="color:rgb(209, 154, 102); font-weight:400;">8</span>]:
+         <span style="color:rgb(230, 192, 123); font-weight:400;">print</span>(<span style="color:rgb(152, 195, 121); font-weight:400;">&#x27;            .&#x27;</span>)
+     losses.append(loss(Y, A, W))
+ 
+ <span style="color:rgb(92, 99, 112); font-weight:400;"># Output</span>
+ <span style="color:rgb(230, 192, 123); font-weight:400;">print</span>(<span style="color:rgb(152, 195, 121); font-weight:400;">f&#x27;W: <span style="color:rgb(224, 108, 117); font-weight:400;">{previous_W.flatten()}</span> -&gt; <span style="color:rgb(224, 108, 117); font-weight:400;">{W.flatten()}</span>&#x27;</span>)
+ <span style="color:rgb(230, 192, 123); font-weight:400;">print</span>(<span style="color:rgb(152, 195, 121); font-weight:400;">f&#x27;Y: <span style="color:rgb(224, 108, 117); font-weight:400;">{Y.flatten()}</span> ~= <span style="color:rgb(224, 108, 117); font-weight:400;">{(A @ W).flatten()}</span>&#x27;</span>)
+ 
+ <span style="color:rgb(92, 99, 112); font-weight:400;"># Graph</span>
+ plt.plot(losses)
+ plt.xlabel(<span style="color:rgb(152, 195, 121); font-weight:400;">&#x27;Epochs&#x27;</span>)
+ plt.ylabel(<span style="color:rgb(152, 195, 121); font-weight:400;">&#x27;Loss&#x27;</span>)
+ plt.savefig(<span style="color:rgb(152, 195, 121); font-weight:400;">&#x27;graph.png&#x27;</span>)
+ plt.close()</code></pre>
+
+ <div style="height: 100px;"></div>
+
+<h2>Output</h2>
+
+<pre>
+  <code id="htmlViewer" style="color:rgb(221, 221, 221); font-weight:400;background-color:rgb(39, 40, 34);background:rgb(39, 40, 34);display:block;padding: .5em;">$ python main.py 
+ <span style="color:rgb(166, 226, 46); font-weight:700;">Loss: 340.381080443314</span>
+ Loss (1): 271.2823807105329
+ Loss (2): 216.2515975467686
+ Loss (3): 172.42400336832483
+ Loss (4): 137.51824026392174
+ Loss (5): 109.71752315572326
+             .
+             .
+             .
+ Loss (997): 2.7843784765948775e-07
+ Loss (998): 2.742164675205845e-07
+ Loss (999): 2.7005908748527544e-07
+ Loss (1000): 2.6596473724906243e-07
+ <span style="color:rgb(166, 226, 46); font-weight:700;">W: [1.76405235 0.40015721 0.97873798] -&gt; [1.32439537 1.35257131 3.32322317]</span>
+ <span style="color:rgb(166, 226, 46); font-weight:700;">Y: [14 32 50] ~= [13.99920748 31.99977701 50.00034653]</span></code></pre>
+
+<h2>Graph</h2>
+<center>
+  <img src="graph.png" alt="">
+</center>
+
+
+</body>
+
+</html>

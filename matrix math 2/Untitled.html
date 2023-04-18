@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="https://gist.github.com/yourgistid.js"></script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <h1>Matrix differentiation using limits</h1>
+
+  let us take <br><br>
+
+  <b>Input Matrix, </b>
+
+  \(A = \begin{bmatrix} a_{11} & a_{12} & \dots & a_{1j} \\ a_{21} & a_{22} & \dots & a_{2j} \\ \vdots & \vdots & \ddots
+  & \vdots \\ a_{i1} & a_{i2} & \dots & a_{ij} \end{bmatrix}\) <br><br>
+
+  <b>Weight Matrix, </b>
+
+  \(W = \begin{bmatrix} w_{11} \\ w_{21} \\ \vdots \\ w_{j1} \end{bmatrix}\) <br><br>
+
+  <b>Output Matrix</b>
+
+  \(Y = \begin{bmatrix} y_{11} \\ y_{21} \\ \vdots \\ y_{i1} \end{bmatrix}\) <br><br>
+
+  <b>Y Predict Matrix, </b>
+
+  \(\hat{Y} = \begin{bmatrix} \hat{y}_{11} \\ \hat{y}_{21} \\ \vdots \\ \hat{y}_{i1} \end{bmatrix}\) <br><br>
+<hr>
+  <h2>Loss [MSE]</h2>
+
+  \(loss = \frac{1}{N}\sum(Y-\hat{Y})^2 \dots \dots \) here \(N\) is the number of rows in input matrix \(A\) <br><br>
+
+  \(loss = \frac{1}{N}\sum(Y-A.W)^2\) <br><br>
+
+  \(loss = \frac{1}{N}\sum \left\{ \begin{bmatrix} y_{11} \\ y_{21} \\ \vdots \\ y_{i1} \end{bmatrix} - \begin{bmatrix}
+  a_{11} & a_{12} & \dots & a_{1j} \\ a_{21} & a_{22} & \dots & a_{2j} \\ \vdots & \vdots & \ddots & \vdots \\ a_{i1} &
+  a_{i2} & \dots & a_{ij} \end{bmatrix} \cdot \begin{bmatrix} w_{11} \\ w_{21} \\ \vdots \\ w_{j1} \end{bmatrix}
+  \right\}^2\) <br><br>
+
+  \(loss = \frac{1}{N}\sum \left\{ \begin{bmatrix} y_{11} \\ y_{21} \\ \vdots \\ y_{i1} \end{bmatrix} - \begin{bmatrix}
+  a_{11}w_{11} + a_{12}w_{21} + \dots + a_{1j}w_{j1} \\ a_{21}w_{11} + a_{22}w_{21} + \dots + a_{2j}w_{j1} \\ \vdots \\
+  a_{i1}w_{11} + a_{i2}w_{21} + \dots + a_{ij}w_{j1} \end{bmatrix} \right\}^2\) <br><br>
+
+  \(loss = \frac{1}{N}\sum \left\{\begin{bmatrix} y_{11} - a_{11}w_{11} + a_{12}w_{21} + \dots + a_{1j}w_{j1} \\ y_{21}
+  - a_{21}w_{11} + a_{22}w_{21} + \dots + a_{2j}w_{j1} \\ \vdots \\ y_{i1} - a_{i1}w_{11} + a_{i2}w_{21} + \dots +
+  a_{ij}w_{j1} \end{bmatrix} \right\}^2\) <br><br>
+
+  \(loss = \frac{1}{N}\sum \left\{\begin{bmatrix} (y_{11} - a_{11}w_{11} + a_{12}w_{21} + \dots + a_{1j}w_{j1})^2 \\
+  (y_{21} - a_{21}w_{11} + a_{22}w_{21} + \dots + a_{2j}w_{j1})^2 \\ \vdots \\ (y_{i1} - a_{i1}w_{11} + a_{i2}w_{21} +
+  \dots + a_{ij}w_{j1})^2 \end{bmatrix} \right\}\) <br><br>
+
+  \(loss = \frac{1}{N} \left\{\begin{matrix} (y_{11} - a_{11}w_{11} + a_{12}w_{21} + \dots + a_{1j}w_{j1})^2 \\ +(y_{21}
+  - a_{21}w_{11} + a_{22}w_{21} + \dots + a_{2j}w_{j1})^2 \\ \vdots \\ +(y_{i1} - a_{i1}w_{11} + a_{i2}w_{21} + \dots +
+  a_{ij}w_{j1})^2 \end{matrix} \right\}\)
+<hr>
+<h2>Grad</h2>
+\(loss(W) = \frac{1}{N} \left\{\begin{matrix} (y_{11} - a_{11}w_{11} + a_{12}w_{21} + \dots + a_{1j}w_{j1})^2 \\ +(y_{21}
+- a_{21}w_{11} + a_{22}w_{21} + \dots + a_{2j}w_{j1})^2 \\ \vdots \\ +(y_{i1} - a_{i1}w_{11} + a_{i2}w_{21} + \dots +
+a_{ij}w_{j1})^2 \end{matrix} \right\}\) <br><br>
+\(\displaystyle \delta w_{j1} = \lim_{h_{j1} \rightarrow 0} \frac{loss(w_{j1}+h) - loss(w_{j1}-h)}{2h}\) <br><br>
+
+\(\delta W = \begin{bmatrix} \displaystyle \lim_{h \rightarrow 0} \frac{loss(w_{11}+h) - loss(w_{11}-h)}{2h} \\ \displaystyle \lim_{h \rightarrow 0} \frac{loss(w_{21}+h) - loss(w_{21}-h)}{2h} \\ \vdots \\ \displaystyle \lim_{h \rightarrow 0} \frac{loss(w_{j1}+h) - loss(w_{j1}-h)}{2h} \end{bmatrix} \) <br><br>
+
+\(\delta W = \displaystyle \lim_{h \rightarrow 0} \frac{1}{2h} \begin{bmatrix} loss(w_{11}+h) - loss(w_{11}-h) \\ loss(w_{21}+h) - loss(w_{21}-h) \\ \vdots \\ loss(w_{j1}+h) - loss(w_{j1}-h) \end{bmatrix} \) <br><br>
+
+\(\delta W = \displaystyle \lim_{h \rightarrow 0} \frac{1}{2h} \left\{ \begin{bmatrix} loss(w_{11}+h)\\ loss(w_{21}+h) \\ \vdots \\ loss(w_{j1}+h) \end{bmatrix} - \begin{bmatrix} loss(w_{11}-h)\\ loss(w_{21}-h) \\ \vdots \\ loss(w_{j1}-h) \end{bmatrix} \right\} \) <br><br>
+
+\(\delta W = \displaystyle \lim_{h \rightarrow 0} \frac{1}{2h} \left\{ loss \left( \begin{bmatrix} w_{11}+h\\ w_{21}+h \\ \vdots \\ w_{j1}+h \end{bmatrix} \right) - loss \left( \begin{bmatrix} w_{11}-h\\ w_{21}-h \\ \vdots \\ w_{j1}-h \end{bmatrix} \right) \right\} \)
+
+\(\delta W = \displaystyle \lim_{h \rightarrow 0} \frac{1}{2h} \left\{ loss \left( \begin{bmatrix} w_{11}\\ w_{21} \\ \vdots \\ w_{j1} \end{bmatrix} + \begin{bmatrix} h\\ h \\ \vdots \\ h \end{bmatrix} \right) - loss \left( \begin{bmatrix} w_{11}\\ w_{21} \\ \vdots \\ w_{j1} \end{bmatrix} - \begin{bmatrix} h\\ h \\ \vdots \\ h \end{bmatrix}\right) \right\} \) <br><br>
+
+\(\delta W = \displaystyle \lim_{h \rightarrow 0} \frac{loss \left( W + H \right) - loss \left( W - H\right)}{2h}  \)
+
+</body>
+
+</html>
